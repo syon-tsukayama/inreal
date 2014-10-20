@@ -7,6 +7,146 @@
 require_once('./config.php');
 
 /**
+* データベース接続処理
+*/
+function connect_database()
+{
+    global $_dsn;
+    global $_db_user;
+    global $_db_password;
+
+    $conn = null;
+
+    // データベース接続失敗時に「例外」が発生するので、
+    // 「例外」発生時にエラーメッセージを表示する
+    try
+    {
+        // データベース接続実施
+        $conn = new PDO($_dsn, $_db_user, $_db_password);
+    }
+    catch(PDOException $e)
+    {
+        throw $e;
+    }
+
+    return $conn;
+}
+
+/**
+ * ファイルパスデータの件数確認
+ *
+ * @param object
+ * @param string
+ * @param string
+ *
+ * @return mixed
+ */
+function count_data_file_path($conn, $dir_name, $file_name)
+{
+    $return_value = false;
+
+    if(is_object($conn))
+    {
+        $dir_name = trim(rtrim(trim($dir_name), DS));
+        $file_name = trim(rtrim(trim($file_name), DS));
+
+        if(!empty($dir_name) && !empty($file_name))
+        {
+            $query =<<<EOS
+SELECT COUNT(*) FROM `motion_histories`
+WHERE `dir_name` = :dir_name AND `file_name` = :file_name;
+EOS
+;
+            $stmt = $conn->prepare($query);
+
+            $stmt->bindValue(':dir_name', $dir_name, PDO::PARAM_STR);
+            $stmt->bindValue(':file_name', $file_name, PDO::PARAM_STR);
+
+            if($stmt->execute())
+            {
+                $row = $stmt->fetch();
+
+                if(isset($row['COUNT(*)']) && is_numeric($row['COUNT(*)']))
+                {
+                    $return_value = $row['COUNT(*)'];
+                }
+            }
+        }
+    }
+
+    return $return_value;
+}
+
+
+/**
+ * ファイルパスからid取得
+ */
+function get_id_file_path($conn, $dir_name, $file_name)
+{
+    $return_value = false;
+
+    if(is_object($conn))
+    {
+        $dir_name = trim(rtrim(trim($dir_name), DS));
+        $file_name = trim(rtrim(trim($file_name), DS));
+
+        if(!empty($dir_name) && !empty($file_name))
+        {
+            $query =<<<EOS
+SELECT `id` FROM `motion_histories`
+WHERE `dir_name` = :dir_name AND `file_name` = :file_name;
+EOS
+;
+            $stmt = $conn->prepare($query);
+
+            $stmt->bindValue(':dir_name', $dir_name, PDO::PARAM_STR);
+            $stmt->bindValue(':file_name', $file_name, PDO::PARAM_STR);
+
+            if($stmt->execute())
+            {
+                $row = $stmt->fetch();
+
+                if(isset($row['id']) && is_numeric($row['id']))
+                {
+                    $return_value = $row['id'];
+                }
+            }
+        }
+    }
+
+    return $return_value;
+}
+
+
+
+function get_motion_history($conn, $id)
+{
+    $return_data = array();
+
+    if(is_object($conn))
+    {
+        if(!empty($id) && is_numeric($id))
+        {
+            $query =<<<EOS
+SELECT * FROM `motion_histories` WHERE `id` = :id;
+EOS
+;
+            $stmt = $conn->prepare($query);
+
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+
+            if($stmt->execute())
+            {
+                $return_data = $stmt->fetch();
+            }
+        }
+    }
+
+    return $return_data;
+}
+
+
+/**
  * ディレクトリ内のファイル名・ディレクトリ名取得
  *
  * @param string
@@ -28,6 +168,8 @@ function get_dir_lists()
 function get_img_lists($img_dir_url)
 {
     $img_file_name_array = array();
+
+    $img_dir_url = rtrim($img_dir_url, DS);
 
     // ディレクトリ内のファイル名取得
     $file_name_array = scandir($img_dir_url);

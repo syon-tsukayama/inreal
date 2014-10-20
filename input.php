@@ -77,9 +77,33 @@ if(!file_get_contents($_file_path, null, null, 1, 1))
 // 前へ、次へのリンク作成のため
 // 表示ファイルの前後のファイル名取得
 
+try
+{
+    // データベース接続
+    $conn = connect_database();
+}
+catch(PDOException $e)
+{
+    $error_message = $e->getMessage();
+}
 
 // ディレクトリ名、ファイル名でデータベース検索
-// 初期表示時のデータ取得
+if(1 == count_data_file_path($conn, $_dir_name, $_file_name))
+{
+    // 初期表示時のデータ取得
+    $id = get_id_file_path($conn, $_dir_name, $_file_name);
+
+    if(empty($id))
+    {
+        $motion_history = get_motion_history($conn, $id);
+    }
+}
+else
+{
+    $id = 0;
+}
+
+
 
 
 $subject = 'どの楽器の音に興味を示したか把握する';
