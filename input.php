@@ -1,12 +1,16 @@
 <?php
 
 /**
- * インリアル
+ * インリアル入力画面
  */
+
+session_start();
 
 // 共通機能読み込み
 require_once('./common.php');
 
+$success_message = '';
+$error_message   = '';
 
 $dir_name = '';
 
@@ -72,6 +76,7 @@ if(!file_get_contents($_file_path, null, null, 1, 1))
 // 前へ、次へのリンク作成のため
 // 表示ファイルの前後のファイル名取得
 
+
 try
 {
     // データベース接続
@@ -82,49 +87,119 @@ catch(PDOException $e)
     $error_message = $e->getMessage();
 }
 
-// ディレクトリ名、ファイル名でデータベース検索
+// ディレクトリ名、ファイル名でデータベース検索＆件数取得
+// 結果が1件の場合、既に登録データが存在するとみなし、ID取得
 if(1 == count_data_file_path($conn, $_dir_name, $_file_name))
 {
-    // 初期表示時のデータ取得
+    // ディレクトリ名、ファイル名からデータのID取得
     $id = get_id_file_path($conn, $_dir_name, $_file_name);
-
-    if(empty($id))
-    {
-        $motion_history = get_motion_history($conn, $id);
-    }
 }
 else
 {
     $id = 0;
 }
 
+if(empty($id))
+{
+    // POSTデータが存在する場合、新規登録
+    if(isset($_POST['motion_history']) && !empty($_POST['motion_history']))
+    {
+        // ID無し、POSTデータ有り = データ新規登録処理
 
+        if(insert_motion_history($conn, $_POST['motion_history'], $error_info))
+        {
+            $_SESSION['success_message'] = 'データを新規登録しました。';
+        }
+        else
+        {
+            $_SESSION['error_message'] = 'データの新規登録に失敗しました。<br>'.print_r($error_info, true);
+        }
 
+        // スクリプト終了前に別ページへ遷移するので、SESSIONデータを書き込み
+        session_write_close();
 
-$subject = 'どの楽器の音に興味を示したか把握する';
-$grade_id = '';
-$person_name = '';
-$pose_id = '';
-$record_date = '';
-$exposure_time = '';
-$speak_remark =<<<EOS
-「カスタネットだよ」と言いながらカスタネットの音を鳴らして音を聞かせる
-EOS
-;
-$part_name_1 = '親指';
-$motion_level_1 = '';
-$part_name_2 = '人差し指';
-$motion_level_2 = '';
-$part_name_3 = '';
-$motion_level_3 = '';
-$part_name_4 = '';
-$motion_level_4 = '';
-$motion_remark =<<<EOS
-教師の方を見る
-左手を動かす
-EOS
-;
-$motion_type_id = '';
+        $get_params = array(
+            'dir_name' => $_dir_name,
+            'file_name' => $_file_name
+            );
+        $redirect_url = create_html_href('input.php', $get_params);
+        header('Location: '.$redirect_url);
+    }
+    else
+    {
+        // ID無し、POSTデータ無し = 新規登録画面初期表示
+
+        $html_subject        = '';
+        $html_grade_id       = '';
+        $html_person_name    = '';
+        $html_pose_id        = '';
+        $html_record_date    = date('Y-m-d');
+        $html_exposure_time  = '0';
+        $html_speak_remark   = '';
+        $html_part_name_1    = '';
+        $html_motion_level_1 = '';
+        $html_part_name_2    = '';
+        $html_motion_level_2 = '';
+        $html_part_name_3    = '';
+        $html_motion_level_3 = '';
+        $html_part_name_4    = '';
+        $html_motion_level_4 = '';
+        $html_motion_remark  = '';
+        $html_motion_type_id = '';
+    }
+}
+else
+{
+    // POSTデータが存在する場合、更新
+    if(isset($_POST['motion_history']) && !empty($_POST['motion_history']))
+    {
+        // ID有り、POSTデータ有り = データ更新処理
+
+        if(update_motion_history($conn, $_POST['motion_history'], $error_info))
+        {
+            $_SESSION['success_message'] = 'データを更新しました。';
+        }
+        else
+        {
+            $_SESSION['error_message'] = 'データの更新に失敗しました。<br>'.print_r($error_info, true);
+        }
+
+        // スクリプト終了前に別ページへ遷移するので、SESSIONデータを書き込み
+        session_write_close();
+
+        $get_params = array(
+            'dir_name' => $_dir_name,
+            'file_name' => $_file_name
+            );
+        $redirect_url = create_html_href('input.php', $get_params);
+        header('Location: '.$redirect_url);
+    }
+    else
+    {
+        // ID有り、POSTデータ無し = 更新画面初期表示
+
+        // IDから初期表示のためのデータ取得
+        $motion_history = get_motion_history($conn, $id);
+
+        $html_subject        = htmlspecialchars($motion_history['subject'], ENT_QUOTES);
+        $html_grade_id       = htmlspecialchars($motion_history['grade_id'], ENT_QUOTES);
+        $html_person_name    = htmlspecialchars($motion_history['person_name'], ENT_QUOTES);
+        $html_pose_id        = htmlspecialchars($motion_history['pose_id'], ENT_QUOTES);
+        $html_record_date    = htmlspecialchars($motion_history['record_date'], ENT_QUOTES);
+        $html_exposure_time  = htmlspecialchars($motion_history['exposure_time'], ENT_QUOTES);
+        $html_speak_remark   = htmlspecialchars($motion_history['speak_remark'], ENT_QUOTES);
+        $html_part_name_1    = htmlspecialchars($motion_history['part_name_1'], ENT_QUOTES);
+        $html_motion_level_1 = htmlspecialchars($motion_history['motion_level_1'], ENT_QUOTES);
+        $html_part_name_2    = htmlspecialchars($motion_history['part_name_2'], ENT_QUOTES);
+        $html_motion_level_2 = htmlspecialchars($motion_history['motion_level_2'], ENT_QUOTES);
+        $html_part_name_3    = htmlspecialchars($motion_history['part_name_3'], ENT_QUOTES);
+        $html_motion_level_3 = htmlspecialchars($motion_history['motion_level_3'], ENT_QUOTES);
+        $html_part_name_4    = htmlspecialchars($motion_history['part_name_4'], ENT_QUOTES);
+        $html_motion_level_4 = htmlspecialchars($motion_history['motion_level_4'], ENT_QUOTES);
+        $html_motion_remark  = htmlspecialchars($motion_history['motion_remark'], ENT_QUOTES);
+        $html_motion_type_id = htmlspecialchars($motion_history['motion_type_id'], ENT_QUOTES);
+    }
+}
 
 ?>
 <html>
@@ -173,10 +248,28 @@ $(function()
             ?>
             <form action="<?php echo $form_action; ?>" method="post" role="form">
 
+                <?php if(!empty($id) && is_numeric($id)): ?>
+                <input type="hidden" name="motion_history[id]" value="<?php echo $id; ?>">
+                <?php endif; ?>
+
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
 
-                        <?php echo create_html_error_alert($error_message); ?>
+                        <?php
+                        if(isset($_SESSION['success_message']))
+                        {
+                            $success_message .= $_SESSION['success_message'];
+                            unset($_SESSION['success_message']);
+                        }
+                        echo create_html_success_alert($success_message);
+
+                        if(isset($_SESSION['error_message']))
+                        {
+                            $error_message .= $_SESSION['error_message'];
+                            unset($_SESSION['error_message']);
+                        }
+                        echo create_html_error_alert($error_message);
+                        ?>
 
                         <div class="well">
 
@@ -185,14 +278,24 @@ $(function()
                                     <div class="form-group">
                                         <div class="input-group">
                                             <div class="input-group-addon">ねらい</div>
-                                            <input type="text" name="subject" class="form-control" value="<?php echo $subject; ?>">
+                                            <input type="text" name="motion_history[subject]" class="form-control" value="<?php echo $html_subject; ?>">
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-primary btn-block">登録</button>
+                                        <?php
+                                        if(!empty($id) && is_numeric($id))
+                                        {
+                                            $btn_name = '更新';
+                                        }
+                                        else
+                                        {
+                                            $btn_name = '登録';
+                                        }
+                                        ?>
+                                        <button type="submit" class="btn btn-primary btn-block"><?php echo $btn_name; ?></button>
                                     </div>
                                 </div>
                             </div>
@@ -204,8 +307,8 @@ $(function()
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <span class="input-group-addon">学部</span>
-                                                    <select name="grade_id" class="form-control">
-                                                        <?php echo create_html_select_options($_grade_id_options, $grade_id); ?>
+                                                    <select name="motion_history[grade_id]" class="form-control">
+                                                        <?php echo create_html_select_options($_grade_id_options, $html_grade_id); ?>
                                                     </select>
                                                 </div>
                                             </div>
@@ -214,7 +317,7 @@ $(function()
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <span class="input-group-addon">氏名</span>
-                                                    <input type="text" name="person_name" class="form-control" value="<?php echo $person_name; ?>">
+                                                    <input type="text" name="motion_history[person_name]" class="form-control" value="<?php echo $html_person_name; ?>">
                                                 </div>
                                             </div>
                                         </div>
@@ -222,8 +325,8 @@ $(function()
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <span class="input-group-addon">姿勢</span>
-                                                    <select name="pose_id" class="form-control">
-                                                        <?php echo create_html_select_options($_pose_id_options, $pose_id); ?>
+                                                    <select name="motion_history[pose_id]" class="form-control">
+                                                        <?php echo create_html_select_options($_pose_id_options, $html_pose_id); ?>
                                                     </select>
                                                 </div>
                                             </div>
@@ -232,7 +335,7 @@ $(function()
                                             <div class="form-group">
                                                 <div class="input-group datepicker date">
                                                     <span class="input-group-addon">記録日</span>
-                                                    <input type="text" name="record_date" class="form-control" value="<?php echo $record_date; ?>">
+                                                    <input type="text" name="motion_history[record_date]" class="form-control" value="<?php echo $html_record_date; ?>">
                                                     <span class="input-group-addon">
                                                         <span class="glyphicon glyphicon-calendar"></span>
                                                     </span>
@@ -244,7 +347,7 @@ $(function()
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <span class="input-group-addon">撮影時間</span>
-                                                    <input type="text" name="exposure_time" class="form-control" value="<?php echo $exposure_time; ?>">
+                                                    <input type="text" name="motion_history[exposure_time]" class="form-control" value="<?php echo $html_exposure_time; ?>">
                                                     <span class="input-group-addon">秒</span>
                                                 </div>
                                             </div>
@@ -268,6 +371,8 @@ $(function()
                                     <div class="panel panel-info">
                                         <div class="panel-heading">
                                             モーションヒストリーの画像<?php echo '：'.$_dir_name.DS.$_file_name; ?>
+                                            <input type="hidden" name="motion_history[dir_name]" value="<?php echo $_dir_name; ?>">
+                                            <input type="hidden" name="motion_history[file_name]" value="<?php echo $_file_name; ?>">
                                         </div>
                                         <div class="panel-body">
                                             <p>
@@ -285,7 +390,7 @@ $(function()
                                                 <div class="panel-heading">教師の言葉かけ</div>
                                                 <div class="panel-body">
                                                     <div class="form-group">
-                                                        <textarea name="speak_remark" class="form-control" rows="3"><?php echo $speak_remark; ?></textarea>
+                                                        <textarea name="motion_history[speak_remark]" class="form-control" rows="3"><?php echo $html_speak_remark; ?></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -315,13 +420,13 @@ $(function()
                                                     <div class="row">
                                                         <div class="col-md-9">
                                                             <div class="form-group">
-                                                                <input type="text" name="part_name_1" class="form-control" value="<?php echo $part_name_1; ?>">
+                                                                <input type="text" name="motion_history[part_name_1]" class="form-control" value="<?php echo $html_part_name_1; ?>">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <select name="motion_level_1" class="form-control">
-                                                                    <?php echo create_html_select_options($_motion_level_options, $motion_level_1); ?>
+                                                                <select name="motion_history[motion_level_1]" class="form-control">
+                                                                    <?php echo create_html_select_options($_motion_level_options, $html_motion_level_1); ?>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -329,13 +434,13 @@ $(function()
                                                     <div class="row">
                                                         <div class="col-md-9">
                                                             <div class="form-group">
-                                                                <input type="text" name="part_name_2" class="form-control" value="<?php echo $part_name_2; ?>">
+                                                                <input type="text" name="motion_history[part_name_2]" class="form-control" value="<?php echo $html_part_name_2; ?>">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <select name="motion_level_2" class="form-control">
-                                                                    <?php echo create_html_select_options($_motion_level_options, $motion_level_2); ?>
+                                                                <select name="motion_history[motion_level_2]" class="form-control">
+                                                                    <?php echo create_html_select_options($_motion_level_options, $html_motion_level_2); ?>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -343,13 +448,13 @@ $(function()
                                                     <div class="row">
                                                         <div class="col-md-9">
                                                             <div class="form-group">
-                                                                <input type="text" name="part_name_3" class="form-control" value="<?php echo $part_name_3; ?>">
+                                                                <input type="text" name="motion_history[part_name_3]" class="form-control" value="<?php echo $html_part_name_3; ?>">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <select name="motion_level_3" class="form-control">
-                                                                    <?php echo create_html_select_options($_motion_level_options, $motion_level_3); ?>
+                                                                <select name="motion_history[motion_level_3]" class="form-control">
+                                                                    <?php echo create_html_select_options($_motion_level_options, $html_motion_level_3); ?>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -357,13 +462,13 @@ $(function()
                                                     <div class="row">
                                                         <div class="col-md-9">
                                                             <div class="form-group">
-                                                                <input type="text" name="part_name_4" class="form-control" value="<?php echo $part_name_4; ?>">
+                                                                <input type="text" name="motion_history[part_name_4]" class="form-control" value="<?php echo $html_part_name_4; ?>">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <select name="motion_level_4" class="form-control">
-                                                                    <?php echo create_html_select_options($_motion_level_options, $motion_level_4); ?>
+                                                                <select name="motion_history[motion_level_4]" class="form-control">
+                                                                    <?php echo create_html_select_options($_motion_level_options, $html_motion_level_4); ?>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -379,11 +484,11 @@ $(function()
                                                 <div class="panel-heading">身体の動きの様子</div>
                                                 <div class="panel-body">
                                                     <div class="form-group">
-                                                        <textarea name="motion_remark" class="form-control" rows="3"><?php echo $motion_remark; ?></textarea>
+                                                        <textarea name="motion_history[motion_remark]" class="form-control" rows="3"><?php echo $html_motion_remark; ?></textarea>
                                                     </div>
                                                     <div class="form-group">
-                                                        <select name="motion_type_id" class="form-control">
-                                                            <?php echo create_html_select_options($_motion_type_id_options, $motion_type_id); ?>
+                                                        <select name="motion_history[motion_type_id]" class="form-control">
+                                                            <?php echo create_html_select_options($_motion_type_id_options, $html_motion_type_id); ?>
                                                         </select>
                                                     </div>
                                                 </div>
