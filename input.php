@@ -44,6 +44,7 @@ if(count($_img_file_name_array) == 0)
     header('Location: dir_list.php');
 }
 
+$_max_img_index = max(array_keys($_img_file_name_array));
 
 $_file_name = '';
 
@@ -409,8 +410,46 @@ $(function()
                         <div class="well">
 
                             <ul class="pager">
-                                <li><a href="#">&larr; Previous</a></li>
-                                <li><a href="#">Next &rarr;</a></li>
+                                <?php
+                                if($_img_index == 0)
+                                {
+                                    // 最初の画像なのでPrevious無効化
+                                    $class = 'previous disabled';
+                                }
+                                else
+                                {
+                                    $class = 'previous';
+
+                                    $file_name = $_img_file_name_array[($_img_index - 1)];
+
+                                    $get_params = array(
+                                        'dir_name' => $_dir_name,
+                                        'file_name' => $file_name
+                                        );
+                                    $href = create_html_href('input.php', $get_params);
+                                }
+                                ?>
+                                <li class="<?php echo $class; ?>"><a href="<?php echo $href; ?>">&larr; Previous</a></li>
+                                <?php
+                                if($_img_index == $_max_img_index)
+                                {
+                                    // 最後の画像なのでNext無効化
+                                    $class = 'next disabled';
+                                }
+                                else
+                                {
+                                    $class = 'next';
+
+                                    $file_name = $_img_file_name_array[($_img_index + 1)];
+
+                                    $get_params = array(
+                                        'dir_name' => $_dir_name,
+                                        'file_name' => $file_name
+                                        );
+                                    $href = create_html_href('input.php', $get_params);
+                                }
+                                ?>
+                                <li class="<?php echo $class; ?>"><a href="<?php echo $href; ?>">Next &rarr;</a></li>
                             </ul>
 
                             <div class="panel-group" id="accordion">
