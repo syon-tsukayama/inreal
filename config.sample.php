@@ -4,6 +4,9 @@
  * システム設定情報
  */
 
+// タイムゾーン設定
+date_default_timezone_set('Asia/Tokyo');
+
 define('DS', DIRECTORY_SEPARATOR);
 
 // モーションヒストリー画像格納ディレクトリのベースパス
