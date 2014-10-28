@@ -145,6 +145,177 @@ EOS
     return $return_data;
 }
 
+/**
+ * データ新規登録処理
+ */
+function insert_motion_history($conn, $motion_history, &$error_info)
+{
+    $return_value = false;
+
+    if(is_object($conn))
+    {
+        $query =<<<EOS
+INSERT INTO `motion_histories` (
+    `dir_name`,
+    `file_name`,
+    `subject`,
+    `grade_id`,
+    `person_name`,
+    `pose_id`,
+    `record_date`,
+    `exposure_time`,
+    `speak_remark`,
+    `part_name_1`,
+    `motion_level_1`,
+    `part_name_2`,
+    `motion_level_2`,
+    `part_name_3`,
+    `motion_level_3`,
+    `part_name_4`,
+    `motion_level_4`,
+    `motion_remark`,
+    `motion_type_id`,
+    `created`,
+    `modified`
+    )
+VALUES (
+    :dir_name,
+    :file_name,
+    :subject,
+    :grade_id,
+    :person_name,
+    :pose_id,
+    :record_date,
+    :exposure_time,
+    :speak_remark,
+    :part_name_1,
+    :motion_level_1,
+    :part_name_2,
+    :motion_level_2,
+    :part_name_3,
+    :motion_level_3,
+    :part_name_4,
+    :motion_level_4,
+    :motion_remark,
+    :motion_type_id,
+    :created,
+    :modified
+    );
+EOS
+;
+        $stmt = $conn->prepare($query);
+
+        $stmt->bindValue(':dir_name',       $motion_history['dir_name'],       PDO::PARAM_STR);
+        $stmt->bindValue(':file_name',      $motion_history['file_name'],      PDO::PARAM_STR);
+        $stmt->bindValue(':subject',        $motion_history['subject'],        PDO::PARAM_STR);
+        $stmt->bindValue(':grade_id',       $motion_history['grade_id'],       PDO::PARAM_INT);
+        $stmt->bindValue(':person_name',    $motion_history['person_name'],    PDO::PARAM_STR);
+        $stmt->bindValue(':pose_id',        $motion_history['pose_id'],        PDO::PARAM_INT);
+        $stmt->bindValue(':record_date',    $motion_history['record_date'],    PDO::PARAM_STR);
+        $stmt->bindValue(':exposure_time',  $motion_history['exposure_time'],  PDO::PARAM_INT);
+        $stmt->bindValue(':speak_remark',   $motion_history['speak_remark'],   PDO::PARAM_STR);
+        $stmt->bindValue(':part_name_1',    $motion_history['part_name_1'],    PDO::PARAM_STR);
+        $stmt->bindValue(':motion_level_1', $motion_history['motion_level_1'], PDO::PARAM_INT);
+        $stmt->bindValue(':part_name_2',    $motion_history['part_name_2'],    PDO::PARAM_STR);
+        $stmt->bindValue(':motion_level_2', $motion_history['motion_level_2'], PDO::PARAM_INT);
+        $stmt->bindValue(':part_name_3',    $motion_history['part_name_3'],    PDO::PARAM_STR);
+        $stmt->bindValue(':motion_level_3', $motion_history['motion_level_3'], PDO::PARAM_INT);
+        $stmt->bindValue(':part_name_4',    $motion_history['part_name_4'],    PDO::PARAM_STR);
+        $stmt->bindValue(':motion_level_4', $motion_history['motion_level_4'], PDO::PARAM_INT);
+        $stmt->bindValue(':motion_remark',  $motion_history['motion_remark'],  PDO::PARAM_STR);
+        $stmt->bindValue(':motion_type_id', $motion_history['motion_type_id'], PDO::PARAM_INT);
+
+        $datetime = date('Y-m-d H:i:s');
+        $stmt->bindValue(':created',  $datetime,  PDO::PARAM_STR);
+        $stmt->bindValue(':modified', $datetime,  PDO::PARAM_STR);
+
+        if($stmt->execute())
+        {
+            $return_value = true;
+
+            $error_info = array();
+        }
+        else
+        {
+            $error_info = $stmt->errorInfo();
+        }
+    }
+
+    return $return_value;
+}
+
+/**
+ * データ更新処理
+ */
+function update_motion_history($conn, $motion_history, &$error_info)
+{
+    $return_value = false;
+
+    if(is_object($conn) && !empty($motion_history['id']) && is_numeric($motion_history['id']))
+    {
+        $query =<<<EOS
+UPDATE `motion_histories` SET
+    `subject` = :subject,
+    `grade_id` = :grade_id,
+    `person_name` = :person_name,
+    `pose_id` = :pose_id,
+    `record_date` = :record_date,
+    `exposure_time` = :exposure_time,
+    `speak_remark` = :speak_remark,
+    `part_name_1` = :part_name_1,
+    `motion_level_1` = :motion_level_1,
+    `part_name_2` = :part_name_2,
+    `motion_level_2` = :motion_level_2,
+    `part_name_3` = :part_name_3,
+    `motion_level_3` = :motion_level_3,
+    `part_name_4` = :part_name_4,
+    `motion_level_4` = :motion_level_4,
+    `motion_remark` = :motion_remark,
+    `motion_type_id` = :motion_type_id,
+    `modified` = :modified
+WHERE `id` = :id;
+EOS
+;
+        $stmt = $conn->prepare($query);
+
+        $stmt->bindValue(':subject',        $motion_history['subject'],        PDO::PARAM_STR);
+        $stmt->bindValue(':grade_id',       $motion_history['grade_id'],       PDO::PARAM_INT);
+        $stmt->bindValue(':person_name',    $motion_history['person_name'],    PDO::PARAM_STR);
+        $stmt->bindValue(':pose_id',        $motion_history['pose_id'],        PDO::PARAM_INT);
+        $stmt->bindValue(':record_date',    $motion_history['record_date'],    PDO::PARAM_STR);
+        $stmt->bindValue(':exposure_time',  $motion_history['exposure_time'],  PDO::PARAM_INT);
+        $stmt->bindValue(':speak_remark',   $motion_history['speak_remark'],   PDO::PARAM_STR);
+        $stmt->bindValue(':part_name_1',    $motion_history['part_name_1'],    PDO::PARAM_STR);
+        $stmt->bindValue(':motion_level_1', $motion_history['motion_level_1'], PDO::PARAM_INT);
+        $stmt->bindValue(':part_name_2',    $motion_history['part_name_2'],    PDO::PARAM_STR);
+        $stmt->bindValue(':motion_level_2', $motion_history['motion_level_2'], PDO::PARAM_INT);
+        $stmt->bindValue(':part_name_3',    $motion_history['part_name_3'],    PDO::PARAM_STR);
+        $stmt->bindValue(':motion_level_3', $motion_history['motion_level_3'], PDO::PARAM_INT);
+        $stmt->bindValue(':part_name_4',    $motion_history['part_name_4'],    PDO::PARAM_STR);
+        $stmt->bindValue(':motion_level_4', $motion_history['motion_level_4'], PDO::PARAM_INT);
+        $stmt->bindValue(':motion_remark',  $motion_history['motion_remark'],  PDO::PARAM_STR);
+        $stmt->bindValue(':motion_type_id', $motion_history['motion_type_id'], PDO::PARAM_INT);
+
+        $datetime = date('Y-m-d H:i:s');
+        $stmt->bindValue(':modified', $datetime,  PDO::PARAM_STR);
+
+        $stmt->bindValue(':id', $motion_history['id'], PDO::PARAM_INT);
+
+        if($stmt->execute())
+        {
+            $return_value = true;
+
+            $error_info = array();
+        }
+        else
+        {
+            $error_info = $stmt->errorInfo();
+        }
+    }
+
+    return $return_value;
+}
+
 
 /**
  * ディレクトリ内のファイル名・ディレクトリ名取得
@@ -204,6 +375,34 @@ function create_html_error_alert($message)
     {
         $return_value =<<<EOS
 <div class="alert alert-danger" role="alert">
+    <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+        <span class="sr-only">Close</span>
+    </button>
+{$message}
+</div>
+EOS
+;
+    }
+
+    return $return_value;
+}
+
+/**
+ * アラートメッセージ表示処理
+ *
+ * @param string
+ *
+ * @return string
+ */
+function create_html_success_alert($message)
+{
+    $return_value = '';
+
+    if(!empty($message))
+    {
+        $return_value =<<<EOS
+<div class="alert alert-success" role="alert">
     <button type="button" class="close" data-dismiss="alert">
         <span aria-hidden="true">&times;</span>
         <span class="sr-only">Close</span>
