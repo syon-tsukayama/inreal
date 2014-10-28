@@ -7,12 +7,6 @@
 // 共通機能読み込み
 require_once('./common.php');
 
-$error_message = '';
-
-if(!empty($_POST))
-{
-    print_r($_POST);
-}
 
 $dir_name = '';
 
