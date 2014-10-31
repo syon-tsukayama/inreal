@@ -349,7 +349,8 @@ function get_img_lists($img_dir_url)
     {
         foreach($file_name_array as $file_name)
         {
-            if(exif_imagetype($img_dir_url.DS.$file_name))
+            if(!in_array($file_name, array('.', '..'))
+             && exif_imagetype($img_dir_url.DS.$file_name))
             {
                 $img_file_name_array[] = $file_name;
             }
