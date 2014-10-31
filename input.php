@@ -382,6 +382,35 @@ $(function()
                                             </p>
                                         </div>
                                     </div>
+
+                                    <div class="panel panel-info">
+                                        <div class="panel-heading">リンク</div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-xs-6 col-md-3">
+                                                    <a href="#" class="thumbnail">
+                                                        <img alt="..." style="width: 64px; height: 64px;">
+                                                    </a>
+                                                </div>
+                                                <div class="col-xs-6 col-md-3">
+                                                    <a href="#" class="thumbnail">
+                                                        <img alt="..." style="width: 64px; height: 64px;">
+                                                    </a>
+                                                </div>
+                                                <div class="col-xs-6 col-md-3">
+                                                    <a href="#" class="thumbnail">
+                                                        <img alt="..." style="width: 64px; height: 64px;">
+                                                    </a>
+                                                </div>
+                                                <div class="col-xs-6 col-md-3">
+                                                    <a href="#" class="thumbnail">
+                                                        <img alt="..." style="width: 64px; height: 64px;">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
 
                                 <div class="col-md-5">
