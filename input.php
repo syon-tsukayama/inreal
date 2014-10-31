@@ -256,6 +256,7 @@ $(function()
                     <div class="col-md-10 col-md-offset-1">
 
                         <?php
+                        // セッションデータ中のメッセージ確認
                         if(isset($_SESSION['success_message']))
                         {
                             $success_message .= $_SESSION['success_message'];
@@ -286,6 +287,7 @@ $(function()
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <?php
+                                        // ボタン名変更
                                         if(!empty($id) && is_numeric($id))
                                         {
                                             $btn_name = '更新';
