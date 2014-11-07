@@ -386,26 +386,145 @@ $(function()
                                     <div class="panel panel-info">
                                         <div class="panel-heading">リンク</div>
                                         <div class="panel-body">
-                                            <div class="row">
-                                                <div class="col-xs-6 col-md-3">
-                                                    <a href="#" class="thumbnail">
-                                                        <img alt="..." style="width: 64px; height: 64px;">
+                                            <div class="row" style="display: flex; align-items: center;">
+                                                <div class="col-xs-6 col-md-2 text-center">
+                                                    <?php
+                                                    $img_index = $_img_index - 2;
+                                                    if(isset($_img_file_name_array[$img_index]))
+                                                    {
+                                                        $file_name = $_img_file_name_array[($img_index)];
+
+                                                        $get_params = array(
+                                                            'dir_name' => $_dir_name,
+                                                            'file_name' => $file_name
+                                                            );
+                                                        $href = create_html_href('input.php', $get_params);
+                                                        $img_src = $_dir_path.DS.$file_name;
+                                                    ?>
+                                                    <a href="<?php echo $href; ?>">
+                                                        <img alt="<?php echo $file_name; ?>" src="<?php echo $img_src; ?>" class="img-thumbnail" style="width: 64px; height: 64px;">
                                                     </a>
+                                                    <?php
+                                                    }
+                                                    else
+                                                    {
+                                                        $img_src = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjEzLjQ2MDkzNzUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg==';
+                                                    ?>
+                                                    <img alt="none" src="<?php echo $img_src; ?>" class="img-thumbnail" style="width: 64px; height: 64px;">
+                                                    <?php
+                                                    }
+                                                    ?>
+
                                                 </div>
-                                                <div class="col-xs-6 col-md-3">
-                                                    <a href="#" class="thumbnail">
-                                                        <img alt="..." style="width: 64px; height: 64px;">
+                                                <div class="col-xs-6 col-md-2 text-center">
+                                                    <?php
+                                                    $img_index = $_img_index - 1;
+                                                    if(isset($_img_file_name_array[$img_index]))
+                                                    {
+                                                        $file_name = $_img_file_name_array[($img_index)];
+
+                                                        $get_params = array(
+                                                            'dir_name' => $_dir_name,
+                                                            'file_name' => $file_name
+                                                            );
+                                                        $href = create_html_href('input.php', $get_params);
+                                                        $img_src = $_dir_path.DS.$file_name;
+                                                    ?>
+                                                    <a href="<?php echo $href; ?>">
+                                                        <img alt="<?php echo $file_name; ?>" src="<?php echo $img_src; ?>" class="img-thumbnail" style="width: 64px; height: 64px;">
                                                     </a>
+                                                    <?php
+                                                    }
+                                                    else
+                                                    {
+                                                        $img_src = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjEzLjQ2MDkzNzUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg==';
+                                                    ?>
+                                                    <img alt="none" src="<?php echo $img_src; ?>" class="img-thumbnail" style="width: 64px; height: 64px;">
+                                                    <?php
+                                                    }
+                                                    ?>
                                                 </div>
-                                                <div class="col-xs-6 col-md-3">
-                                                    <a href="#" class="thumbnail">
-                                                        <img alt="..." style="width: 64px; height: 64px;">
-                                                    </a>
+                                                <div class="col-xs-6 col-md-1">
+                                                    <span class="glyphicon glyphicon-chevron-left"></span>
                                                 </div>
-                                                <div class="col-xs-6 col-md-3">
-                                                    <a href="#" class="thumbnail">
-                                                        <img alt="..." style="width: 64px; height: 64px;">
+                                                <div class="col-xs-6 col-md-2 text-center">
+                                                    <?php
+                                                    $img_index = $_img_index;
+                                                    if(isset($_img_file_name_array[$img_index]))
+                                                    {
+                                                        $file_name = $_img_file_name_array[($img_index)];
+
+                                                        $get_params = array(
+                                                            'dir_name' => $_dir_name,
+                                                            'file_name' => $file_name
+                                                            );
+                                                        $href = '#';
+                                                        $img_src = $_dir_path.DS.$file_name;
+                                                    ?>
+                                                    <img alt="<?php echo $file_name; ?>" src="<?php echo $img_src; ?>" class="img-thumbnail" style="width: 64px; height: 64px;">
+                                                    <p class="text-center">表示中</p>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </div>
+                                                <div class="col-xs-6 col-md-1">
+                                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                                </div>
+                                                <div class="col-xs-6 col-md-2 text-center">
+                                                    <?php
+                                                    $img_index = $_img_index + 1;
+                                                    if(isset($_img_file_name_array[$img_index]))
+                                                    {
+                                                        $file_name = $_img_file_name_array[($img_index)];
+
+                                                        $get_params = array(
+                                                            'dir_name' => $_dir_name,
+                                                            'file_name' => $file_name
+                                                            );
+                                                        $href = create_html_href('input.php', $get_params);
+                                                        $img_src = $_dir_path.DS.$file_name;
+                                                    ?>
+                                                    <a href="<?php echo $href; ?>">
+                                                        <img alt="<?php echo $file_name; ?>" src="<?php echo $img_src; ?>" class="img-thumbnail" style="width: 64px; height: 64px;">
                                                     </a>
+                                                    <?php
+                                                    }
+                                                    else
+                                                    {
+                                                        $img_src = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjEzLjQ2MDkzNzUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg==';
+                                                    ?>
+                                                    <img alt="none" src="<?php echo $img_src; ?>" class="img-thumbnail" style="width: 64px; height: 64px;">
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </div>
+                                                <div class="col-xs-6 col-md-2 text-center">
+                                                    <?php
+                                                    $img_index = $_img_index + 2;
+                                                    if(isset($_img_file_name_array[$img_index]))
+                                                    {
+                                                        $file_name = $_img_file_name_array[($img_index)];
+
+                                                        $get_params = array(
+                                                            'dir_name' => $_dir_name,
+                                                            'file_name' => $file_name
+                                                            );
+                                                        $href = create_html_href('input.php', $get_params);
+                                                        $img_src = $_dir_path.DS.$file_name;
+                                                    ?>
+                                                    <a href="<?php echo $href; ?>">
+                                                        <img alt="<?php echo $file_name; ?>" src="<?php echo $img_src; ?>" class="img-thumbnail" style="width: 64px; height: 64px;">
+                                                    </a>
+                                                    <?php
+                                                    }
+                                                    else
+                                                    {
+                                                        $img_src = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjEzLjQ2MDkzNzUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg==';
+                                                    ?>
+                                                    <img alt="none" src="<?php echo $img_src; ?>" class="img-thumbnail" style="width: 64px; height: 64px;">
+                                                    <?php
+                                                    }
+                                                    ?>
                                                 </div>
                                             </div>
                                         </div>
