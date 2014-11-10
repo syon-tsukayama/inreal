@@ -73,9 +73,6 @@ if(!file_get_contents($_file_path, null, null, 1, 1))
     header('Location: dir_list.php');
 }
 
-// 前へ、次へのリンク作成のため
-// 表示ファイルの前後のファイル名取得
-
 
 try
 {
@@ -84,6 +81,7 @@ try
 }
 catch(PDOException $e)
 {
+    // 例外が発生した場合、エラーメッセージを取得
     $error_message = $e->getMessage();
 }
 
