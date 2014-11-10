@@ -146,6 +146,62 @@ if(empty($id))
         $html_motion_level_4 = '';
         $html_motion_remark  = '';
         $html_motion_type_id = '';
+
+        // SESSIONデータを確認して、前画面からの引き継ぎデータの有無を判別
+        if(isset($_SESSION['handover_data'][$_dir_name]) && is_array($_SESSION['handover_data'][$_dir_name]))
+        {
+            if(!empty($_SESSION['handover_data'][$_dir_name]['subject']))
+            {
+                $html_subject = htmlspecialchars($_SESSION['handover_data'][$_dir_name]['subject'], ENT_QUOTES);
+            }
+
+            if(!empty($_SESSION['handover_data'][$_dir_name]['grade_id']))
+            {
+                $html_grade_id = htmlspecialchars($_SESSION['handover_data'][$_dir_name]['grade_id'], ENT_QUOTES);
+            }
+
+            if(!empty($_SESSION['handover_data'][$_dir_name]['person_name']))
+            {
+                $html_person_name = htmlspecialchars($_SESSION['handover_data'][$_dir_name]['person_name'], ENT_QUOTES);
+            }
+
+            if(!empty($_SESSION['handover_data'][$_dir_name]['pose_id']))
+            {
+                $html_pose_id = htmlspecialchars($_SESSION['handover_data'][$_dir_name]['pose_id'], ENT_QUOTES);
+            }
+
+            if(!empty($_SESSION['handover_data'][$_dir_name]['record_date']))
+            {
+                $html_record_date = htmlspecialchars($_SESSION['handover_data'][$_dir_name]['record_date'], ENT_QUOTES);
+            }
+
+            if(!empty($_SESSION['handover_data'][$_dir_name]['exposure_time']))
+            {
+                $html_exposure_time = htmlspecialchars($_SESSION['handover_data'][$_dir_name]['exposure_time'], ENT_QUOTES);
+            }
+
+            if(!empty($_SESSION['handover_data'][$_dir_name]['part_name_1']))
+            {
+                $html_part_name_1 = htmlspecialchars($_SESSION['handover_data'][$_dir_name]['part_name_1'], ENT_QUOTES);
+            }
+
+            if(!empty($_SESSION['handover_data'][$_dir_name]['part_name_2']))
+            {
+                $html_part_name_2 = htmlspecialchars($_SESSION['handover_data'][$_dir_name]['part_name_2'], ENT_QUOTES);
+            }
+
+            if(!empty($_SESSION['handover_data'][$_dir_name]['part_name_3']))
+            {
+                $html_part_name_3 = htmlspecialchars($_SESSION['handover_data'][$_dir_name]['part_name_3'], ENT_QUOTES);
+            }
+
+            if(!empty($_SESSION['handover_data'][$_dir_name]['part_name_4']))
+            {
+                $html_part_name_4 = htmlspecialchars($_SESSION['handover_data'][$_dir_name]['part_name_4'], ENT_QUOTES);
+            }
+
+            unset($_SESSION['handover_data'][$_dir_name]);
+        }
     }
 }
 else
@@ -198,6 +254,9 @@ else
         $html_motion_level_4 = htmlspecialchars($motion_history['motion_level_4'], ENT_QUOTES);
         $html_motion_remark  = htmlspecialchars($motion_history['motion_remark'], ENT_QUOTES);
         $html_motion_type_id = htmlspecialchars($motion_history['motion_type_id'], ENT_QUOTES);
+
+        // 引き継ぐ値をSESSIONへ格納
+        $_SESSION['handover_data'][$_dir_name] = $motion_history;
     }
 }
 
